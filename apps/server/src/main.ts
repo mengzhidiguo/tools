@@ -2,7 +2,6 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-
 import * as express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -22,7 +21,7 @@ app.get('/api', (req, res) => {
 });
 
 function sendResponse(msg: string) {
-  console.log(msg);
+  // console.log(msg);
   io.sockets.emit('jsonrpc-call-res', msg);
 }
 const rpcServer = new JsonRpc2({
@@ -30,7 +29,7 @@ const rpcServer = new JsonRpc2({
   send: sendResponse,
 });
 
-rpcServer.registerRpcCall('subtract', hash, ['a', 'b']);
+rpcServer.registerRpcCall('hash', hash, []);
 
 io.on('connection', (socket) => {
   socket.on('jsonrpc-call', (msg) => {

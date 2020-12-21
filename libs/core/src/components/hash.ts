@@ -100,13 +100,16 @@ const datas = [
   // 'E:\\发布版本\\案例\\台州市商贸核心区城市设计\\f6e828dd-6643-426c-aebd-3a62afb66fcf.zip'
 ];
 export async function run(paths: string[], chunkSize = 1024 * 1024 * 5) {
+  const result: Record<string, unknown> = {};
   for (const path of paths) {
     const hashes = await _hash(path, chunkSize);
     console.log(`${paths.findIndex((p) => p === path) + 1}/${paths.length}`);
     const p = parse(path);
-    console.log(join(p.dir, p.name, 'json'), statSync(path).size);
-    await writeJSON(join(p.dir, p.name + '.json'), hashes);
+    result[p.name] = hashes;
+    // console.log(join(p.dir, p.name, 'json'), statSync(path).size);
+    // await writeJSON(join(p.dir, p.name + '.json'), hashes);
   }
+  return result;
 }
 
 export const hash = run;
