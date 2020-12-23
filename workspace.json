@@ -110,7 +110,8 @@
             "outputPath": "dist/apps/server",
             "main": "apps/server/src/main.ts",
             "tsConfig": "apps/server/tsconfig.app.json",
-            "assets": ["apps/server/src/assets"]
+            "assets": ["apps/server/src/assets"],
+            "externalDependencies": "none"
           },
           "configurations": {
             "production": {
@@ -167,10 +168,35 @@
           }
         }
       }
+    },
+    "app": {
+      "root": "",
+      "architect": {
+        "pack": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx shx rm -rf dist/apps/shell",
+              "npx nx run shell:build --prod --skip-nx-cache",
+              "npx shx rm -rf dist/apps/server",
+              "npx nx run server:build --prod --skip-nx-cache",
+              "npx pkg dist/apps/server/main.js --config ./pack.json --output dist/build/tools -t node12-win,node12-linux,node12-macos"
+            ],
+            "parallel": false
+          }
+        }
+      }
     }
   },
   "cli": {
     "defaultCollection": "@nrwl/react"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "options": {
+        "cacheableOperations": ["test", "lint", "e2e"]
+      }
+    }
   },
   "schematics": {
     "@nrwl/react": {
